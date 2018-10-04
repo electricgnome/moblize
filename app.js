@@ -1,9 +1,11 @@
 const express = require("express");
 body_parser = require("body-parser");
 const Promise = require("bluebird");
+mongoose = require('mongoose');
 session = require("express-session");
 (redis = require("redis")), (client = redis.createClient(process.env.REDIS_URL || null));
 
+mongoose.connect(process.env.MONGO_URL)
 
 const RedisStore = require("connect-redis")(session);
 serveStatic = require('serve-static');

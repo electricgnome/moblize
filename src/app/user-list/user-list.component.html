@@ -1,4 +1,5 @@
-
+<div nz-row>
+    <div nz-col nzSpan="8" nzOffset="6">
 <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item>
       <nz-form-control>
@@ -10,7 +11,7 @@
     </nz-form-item>
     <nz-form-item>
       <nz-form-control>
-        <nz-input-group nzPrefixIcon="anticon anticon-lock">
+        <nz-input-group nzPrefixIcon="anticon anticon-mail">
           <input formControlName="email" nz-input type="email" placeholder="email" [(ngModel)]="eMail" ngModel email>
         </nz-input-group>
         <nz-form-explain *ngIf="validateForm.get('email').dirty && validateForm.get('email').errors">Please input your email!</nz-form-explain>
@@ -22,9 +23,7 @@
       </nz-form-control>
     </nz-form-item>
   </form>
-
-
-<button nz-button (click)="addRow()" class="editable-add-btn">Add</button>
+<nz-card nzTitle="User List"  style="width: 900px;">
 <nz-table
   #editRowTable
   nzBordered
@@ -74,3 +73,6 @@
     </tr>
   </tbody>
 </nz-table>
+</nz-card>
+</div>
+</div>

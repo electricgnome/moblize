@@ -10,7 +10,6 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { registerLocaleData } from '@angular/common';
 import en from '@angular/common/locales/en';
 import { NavbarComponent } from './navbar/navbar.component';
-import { UserFormComponent } from './user-form/user-form.component';
 import { UserListComponent } from './user-list/user-list.component';
 registerLocaleData(en);
 
@@ -18,7 +17,6 @@ registerLocaleData(en);
   declarations: [
     AppComponent,
     NavbarComponent,
-    UserFormComponent,
     UserListComponent
   ],
   imports: [
