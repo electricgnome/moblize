@@ -1,3 +1,5 @@
+require('dotenv').config();
+
 const express = require("express");
 body_parser = require("body-parser");
 const Promise = require("bluebird");
@@ -5,7 +7,10 @@ mongoose = require('mongoose');
 session = require("express-session");
 (redis = require("redis")), (client = redis.createClient(process.env.REDIS_URL || null));
 
+mongoose.Promise = global.Promise
 mongoose.connect(process.env.MONGO_URL)
+  .then(()=> console.log('Connection succesful'))
+  .catch((err)=> console.error(err));
 
 const RedisStore = require("connect-redis")(session);
 serveStatic = require('serve-static');
@@ -29,12 +34,18 @@ app.use(
 );
 
 
-app.use("/", serveStatic ('/dist/moblize/index.html')) //static for VUE
+
+const users = require('./routes/users');
+app.use('/users', users)
 
 
-app.get("/", function(request, response) {
-  response.render("index.html");
-});
+
+// app.use("/", serveStatic ('/dist/')) //static for VUE
+
+
+// app.get("/", function(request, response) {
+//  response.render("index.html");
+//});
 
 //################################----------###############################
 

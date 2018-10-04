@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 
 mongoose.connect(process.env.MONGO_URL)
@@ -22,3 +23,4 @@ User.find(function(err,users){
     if(err) return console.error(err);
     console.log(users)
 });
+
