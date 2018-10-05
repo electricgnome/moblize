@@ -1,28 +1,38 @@
-require('dotenv').config();
+require("dotenv").config();
 
 const express = require("express");
-body_parser = require("body-parser");
+const body_parser = require("body-parser");
 const Promise = require("bluebird");
-mongoose = require('mongoose');
-session = require("express-session");
-(redis = require("redis")), (client = redis.createClient(process.env.REDIS_URL || null));
+const mongoose = require("mongoose");
+const session = require("express-session");
+(redis = require("redis")),
+  (client = redis.createClient(process.env.REDIS_URL || null));
+const routes = require("./routes/index");
 
-mongoose.Promise = global.Promise
-mongoose.connect(process.env.MONGO_URL)
-  .then(()=> console.log('Connection succesful'))
-  .catch((err)=> console.error(err));
+const users = require("./routes/users");
+
+mongoose.Promise = global.Promise;
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => console.log("Connection succesful"))
+  .catch(err => console.error(err));
 
 const RedisStore = require("connect-redis")(session);
-serveStatic = require('serve-static');
-path = require('path');
-app = express();
+const serveStatic = require("serve-static");
+const path = require("path");
+const app = express();
+const http = require("http").Server(app);
 
-http = require("http").Server(app);
+app.use(express.json());
 
-app.use(body_parser.urlencoded({ extended: true }));
+// app.set("views", path.join(__dirname, "dist"));
+// app.set("view engine", "ejs");
+
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({ extended: false }));
 app.use(express.static("dist"));
 
-var hour = 3600000;
+const hour = 3600000;
 app.use(
   session({
     store: new RedisStore(),
@@ -33,15 +43,26 @@ app.use(
   })
 );
 
+app.use("/", serveStatic(path.join(__dirname, "/dist/moblize"))); //static for VUE
 
+// app.use("/", routes);
+app.use("/users", users);
 
-const users = require('./routes/users');
-app.use('/users', users)
+// app.use(function(req, res, next) {
+//   var err = new Error("Not Found");
+//   err.status = 404;
+//   next(err);
+// });
 
-
-
-// app.use("/", serveStatic ('/dist/')) //static for VUE
-
+// if (app.get("env") === "development") {
+//   app.use(function(err, req, res, next) {
+//     res.status(err.status || 500);
+//     res.render("error", {
+//       message: err.message,
+//       error: err
+//     });
+//   });
+// }
 
 // app.get("/", function(request, response) {
 //  response.render("index.html");
@@ -49,7 +70,7 @@ app.use('/users', users)
 
 //################################----------###############################
 
-var PORT = process.env.PORT || 8801;
+const PORT = process.env.PORT || 8801;
 http.listen(PORT, function() {
   console.log("Listening on port " + PORT);
 });
