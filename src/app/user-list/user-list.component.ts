@@ -6,6 +6,8 @@ import {
   Validators
 } from '@angular/forms';
 
+import { HttpClient } from '@angular/common/http';
+
 @Component({
   selector: 'app-user-list',
   templateUrl: './user-list.component.html',
@@ -24,27 +26,32 @@ export class UserListComponent implements OnInit {
     }
   }
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private http:HttpClient) {
   }
+
+
 
 i = 1;
 userName = '';
 eMail = '';
 editCache = {};
-dataSet = [
-{
-  key    : '0',
-  name   : 'Edward King 0',
-  email    : 'edward0@king.com',
+// dataSet = [
+// {
+//   key    : '0',
+//   name   : 'Edward King 0',
+//   email    : 'edward0@king.com',
  
-},
-{
-  key    : '1',
-  name   : 'Edward King 1',
-  email    : 'edward1@king.com',
+// },
+// {
+//   key    : '1',
+//   name   : 'Edward King 1',
+//   email    : 'edward1@king.com',
  
-}
-];
+// }
+// ];
+dataSet :any;
+userList: any;
+
 
 addRow(): void {
 this.i++;
@@ -91,6 +98,16 @@ this.validateForm = this.fb.group({
   email: [ null, [ Validators.required ] ],
   remember: [ true ]
   });
+
+  let obs = this.http.get('/api')
+  obs.subscribe((res)=>{ 
+    console.log('got response')
+   
+    this.dataSet = res
+    console.dir(this.dataSet)
+  })
+
+
 }
 
 }

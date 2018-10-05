@@ -12,7 +12,7 @@ const redis = require("redis");
 const client = redis.createClient(process.env.REDIS_URL || null);
 
 // const routes = require("./routes/index");
-const users = require("./routes/users");
+const api = require("./routes/users");
 
 const path = require("path");
 const app = express();
@@ -43,7 +43,8 @@ app.use(
 
 app.use("/", serveStatic(path.join(__dirname, "/dist/moblize"))); 
 
-app.use("/users", users);
+
+app.use("/api", api);
 
 
 const PORT = process.env.PORT || 8801;

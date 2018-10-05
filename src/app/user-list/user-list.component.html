@@ -1,4 +1,4 @@
-<div nz-row>
+<div nz-row  *ngIf="dataSet">
     <div nz-col nzSpan="8" nzOffset="6">
 <form nz-form [nzLayout]="'inline'" [formGroup]="validateForm" (ngSubmit)="submitForm()">
     <nz-form-item>
@@ -25,6 +25,7 @@
   </form>
 <nz-card nzTitle="User List"  style="width: 900px;">
 <nz-table
+  
   #editRowTable
   nzBordered
   [nzData]="dataSet">
@@ -74,5 +75,8 @@
   </tbody>
 </nz-table>
 </nz-card>
+</div>
+<div *ngIf="dataSet">
+ {{dataSet[0].name}}
 </div>
 </div>
