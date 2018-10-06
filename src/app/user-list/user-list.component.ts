@@ -1,113 +1,103 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit } from "@angular/core";
 
-import {
-  FormBuilder,
-  FormGroup,
-  Validators
-} from '@angular/forms';
+import { FormBuilder, FormGroup, Validators } from "@angular/forms";
 
-import { HttpClient } from '@angular/common/http';
+import { HttpClient } from "@angular/common/http";
 
 @Component({
-  selector: 'app-user-list',
-  templateUrl: './user-list.component.html',
-  styleUrls: ['./user-list.component.scss']
+  selector: "app-user-list",
+  templateUrl: "./user-list.component.html",
+  styleUrls: ["./user-list.component.scss"]
 })
-
-
 export class UserListComponent implements OnInit {
-
   validateForm: FormGroup;
 
   submitForm(): void {
     for (const i in this.validateForm.controls) {
-      this.validateForm.controls[ i ].markAsDirty();
-      this.validateForm.controls[ i ].updateValueAndValidity();
+      this.validateForm.controls[i].markAsDirty();
+      this.validateForm.controls[i].updateValueAndValidity();
     }
   }
 
-  constructor(private fb: FormBuilder, private http:HttpClient) {
+  constructor(private fb: FormBuilder, private http: HttpClient) {}
+
+  userName = "";
+  eMail = "";
+  editCache = {};
+  dataSet: any;
+
+  addRow(): void {
+    if (this.dataSet.find(item => item.email === this.eMail) === undefined) {
+      this.http
+        .post("/api/", {
+          name: this.userName,
+          email: this.eMail.toLowerCase()
+        })
+        .subscribe(res => {
+          this.dataSet = [
+            ...this.dataSet,
+            {
+              _id: Object(res)._id,
+              name: this.userName,
+              email: this.eMail.toLowerCase()
+            }
+          ];
+          this.updateEditCache();
+        });
+    }
   }
 
-
-
-i = 1;
-userName = '';
-eMail = '';
-editCache = {};
-// dataSet = [
-// {
-//   key    : '0',
-//   name   : 'Edward King 0',
-//   email    : 'edward0@king.com',
- 
-// },
-// {
-//   key    : '1',
-//   name   : 'Edward King 1',
-//   email    : 'edward1@king.com',
- 
-// }
-// ];
-dataSet :any;
-userList: any;
-
-
-addRow(): void {
-this.i++;
-this.dataSet = [ ...this.dataSet, {
-  key    : `${this.i}`,
-  name   : `${this.userName}`,
-  email    : `${this.eMail}`,
-} ];
-this.updateEditCache();
-}
-
-deleteRow(i: string): void {
-const dataSet = this.dataSet.filter(d => d.key !== i);
-this.dataSet = dataSet;
-}
-
-startEdit(key: string): void {
-this.editCache[ key ].edit = true;
-}
-
-finishEdit(key: string): void {
-this.editCache[ key ].edit = false;
-this.dataSet.find(item => item.key === key).name = this.editCache[ key ].name;
-this.dataSet.find(item => item.key === key).email = this.editCache[ key ].email;
-
-}
-
-updateEditCache(): void {
-this.dataSet.forEach(item => {
-  if (!this.editCache[ item.key ]) {
-    this.editCache[ item.key ] = {
-      edit: false,
-      name: item.name,
-      email: item.email
-    };
+  deleteRow(i: string): void {
+    const dataSet = this.dataSet.filter(d => d._id !== i);
+    this.http.delete(`/api/${i}`).subscribe(res => {
+      this.dataSet = dataSet;
+      this.updateEditCache();
+    });
   }
-});
-}
 
-ngOnInit(): void {
-this.updateEditCache();
-this.validateForm = this.fb.group({
-  userName: [ null, [ Validators.required ] ],
-  email: [ null, [ Validators.required ] ],
-  remember: [ true ]
-  });
+  startEdit(_id: string): void {
+    this.editCache[_id].edit = true;
+  }
 
-  let obs = this.http.get('/api')
-  obs.subscribe((res)=>{ 
-    console.log('got response')
-   
-    this.dataSet = res
-    console.dir(this.dataSet)
-  })
+  finishEdit(_id: string): void {
+    this.http
+      .put(`/api/${_id}`, {
+        name: this.editCache[_id].name,
+        email: this.editCache[_id].email.toLowerCase()
+      })
+      .subscribe(res => {
+        this.editCache[_id].edit = false;
+        this.dataSet.find(item => item._id === _id).name = this.editCache[
+          _id
+        ].name;
+        this.dataSet.find(item => item._id === _id).email = this.editCache[
+          _id
+        ].email;
+      });
+  }
 
+  updateEditCache(): void {
+    this.dataSet.forEach(item => {
+      if (!this.editCache[item._id]) {
+        this.editCache[item._id] = {
+          edit: false,
+          name: item.name,
+          email: item.email
+        };
+      }
+    });
+  }
 
-}
+  ngOnInit(): void {
+    this.http.get("/api").subscribe(res => {
+      this.dataSet = res;
+      this.updateEditCache();
+    });
 
+    this.validateForm = this.fb.group({
+      userName: [null, [Validators.required]],
+      email: [null, [Validators.required]],
+      remember: [true]
+    });
+  }
 }
