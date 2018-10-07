@@ -5,7 +5,7 @@
 </p>
 
 This is a simple CRUD application built using the MEAN Stack. 
-For simplicty I have chosen to use an <mlab.com> mongodb instance. If you would like to test this app you will need your own free mlab account.
+For simplicty I have chosen to use an [mlab.com](https://mlab.com) mongodb instance. If you would like to test this app you will need your own free mlab account.
 
 #### _Features:_
 1. Create new users by adding `First Last name`, and `email`. The script checks to ensure no duplicate emials exisit before adding the new user.
