@@ -30,7 +30,7 @@ export class UserListComponent implements OnInit {
     if (this.dataSet.find(item => item.email === this.eMail) === undefined) {
       this.http
         .post("/api/", {
-          name: this.userName,
+          name: this.userName.toLowerCase(),
           email: this.eMail.toLowerCase()
         })
         .subscribe(res => {
@@ -38,11 +38,12 @@ export class UserListComponent implements OnInit {
             ...this.dataSet,
             {
               _id: Object(res)._id,
-              name: this.userName,
+              name: this.userName.toLowerCase(),
               email: this.eMail.toLowerCase()
             }
           ];
           this.updateEditCache();
+          this.validateForm.reset()
         });
     }
   }
@@ -62,7 +63,7 @@ export class UserListComponent implements OnInit {
   finishEdit(_id: string): void {
     this.http
       .put(`/api/${_id}`, {
-        name: this.editCache[_id].name,
+        name: this.editCache[_id].name.toLowerCase(),
         email: this.editCache[_id].email.toLowerCase()
       })
       .subscribe(res => {
