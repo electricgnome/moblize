@@ -25,7 +25,7 @@ _Possible feature improvements:_
 1. _Clone the repo_
 2. _Run `npm i` inside project folder to install all app dependencies from package.json_
 3. _Run `ng build` to build the angular project._
-4. _Create a `.env` edit your `.env` file and place the following line inside: `const MONGO_URL="mongodb://<dbuser>:<dbpassword>@ds121593.mlab.com:21593/moblizeuserbase"`_
+4. _Create a `.env` file in the project root folder:  `touch .env && echo 'const MONGO_URL="mongodb://<dbuser>:<dbpassword>@ds121593.mlab.com:21593/moblizeuserbase"' > .env`_
 5. _in`.env` replace `<dbuser>` and `<dbpassword>` with your mlab mongodb username and password._
 7. _Run `nodemon app.js`_
 8. _Go to `localhost:8801` in your preferred browser._
