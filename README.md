@@ -7,20 +7,20 @@
 This is a simple CRUD application built using the MEAN Stack. 
 For simplicty I have chosen to use an [mlab.com](https://mlab.com) mongodb instance. If you would like to test this app you will need your own free mlab account.
 
-#### _Features:_
+#### Features:
 1. Create new users by adding `First Last name`, and `email`. The script checks to ensure no duplicate emials exisit before adding the new user.
 2. Read the existing list of users from the db.
 3. Update an existing user's name or email.
 4. Delete existing users from the db, one at a time.
 
-_Possible feature improvements:_
+#### Possible feature improvements:
 1. Add the ability to sort by name or email.
 2. Add search capability.
 3. Add bulk delete capability.
 4. Error alerts when a duplicate email is entered.
 
 
-##Build
+## Build
 
 1. _Clone the repo_
 2. _Run `npm i` inside project folder to install all app dependencies from package.json_
